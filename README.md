@@ -73,6 +73,12 @@ Yum repository options for Kubernetes installation.
 
 Flannel manifest files to apply to the Kubernetes cluster to enable networking. You can copy your own files to your server and apply them instead, if you need to customize the Flannel networking configuration.
 
+Allow access to cluster.
+
+    sudo cp /etc/kubernetes/admin.conf $HOME/
+    sudo chown $(id -u):$(id -g) $HOME/admin.conf
+    export KUBECONFIG=$HOME/admin.conf
+
 ## Dependencies
 
 None.
