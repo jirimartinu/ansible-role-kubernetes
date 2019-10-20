@@ -52,3 +52,10 @@
 
 - include_tasks: node-setup.yml
   when: kubernetes_role == 'node'
+ 
+# Utils
+- name: Add kubectl bash completion
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(kubectl completion bash)
+    state: present
