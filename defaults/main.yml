@@ -6,11 +6,9 @@ kubernetes_packages:
     state: present
   - name: kubeadm
     state: present
-  - name: kubernetes-cni
-    state: present
 
-kubernetes_version: '1.15'
-kubernetes_version_rhel_package: '1.15.0'
+kubernetes_version: '1.16'
+kubernetes_version_rhel_package: '1.16.0'
 
 kubernetes_role: master
 kubernetes_nodes_groups: groups['all']
@@ -35,5 +33,4 @@ kubernetes_apt_ignore_key_error: false
 kubernetes_yum_arch: x86_64
 
 # Flannel config files.
-kubernetes_flannel_manifest_file_rbac: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
 kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml

@@ -20,19 +20,27 @@
 
 - name: Ensure .kube directory exists.
   file:
-    path: ~/.kube
+    path: '{{ item }}'
     state: directory
+  with_items:
+    - '~/.kube'
+    - '/home/{{ ansible_user }}/.kube'
 
-- name: Symlink the kubectl admin.conf to ~/.kube/conf.
+- name: Copy/Symlink the kubectl admin.conf to "~/.kube/conf" and "/home/{{ ansible_user }}/.kube/conf".
   file:
     src: /etc/kubernetes/admin.conf
-    dest: ~/.kube/config
-    state: link
+    dest: '{{ item.dest }}'
+    owner: '{{ item.owner }}'
+    group: '{{ item.group }}'
+    mode: '0644'
+    state: '{{ item.state }}'
+  with_items:
+    - { dest: '~/.kube/config', state: 'link', owner: '0', group: '0' }
+    - { dest: '/home/{{ ansible_user }}/.kube/config', state: 'file', owner: '1000', group: '1000' }
 
 - name: Configure Flannel networking.
   command: "{{ item }}"
   with_items:
-    - kubectl apply -f {{ kubernetes_flannel_manifest_file_rbac }}
     - kubectl apply -f {{ kubernetes_flannel_manifest_file }}
   register: flannel_result
   changed_when: "'created' in flannel_result.stdout"
