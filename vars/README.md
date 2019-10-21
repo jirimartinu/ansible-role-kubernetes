@@ -42,11 +42,11 @@ Extra args to pass to `kubelet` during startup. E.g. to allow `kubelet` to start
 
 Extra args to pass to `kubeadm init` during K8s control plane initialization. E.g. to specify extra Subject Alternative Names for API server certificate, set this to: `"--apiserver-cert-extra-sans my-custom.host"`
 
-    kubernetes_allow_pods_on_master: True
+    kubernetes_allow_pods_on_master: true
 
 Whether to remove the taint that denies pods from being deployed to the Kubernetes master. If you have a single-node cluster, this should definitely be `True`. Otherwise, set to `False` if you want a dedicated Kubernetes master which doesn't run any other pods.
 
-    kubernetes_enable_web_ui: False
+    kubernetes_enable_web_ui: false
     kubernetes_web_ui_manifest_file: https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 
 Whether to enable the Kubernetes web dashboard UI (only accessible on the master itself, or proxied), and the file containing the web dashboard UI manifest.
@@ -60,7 +60,7 @@ Options passed to `kubeadm init` when initializing the Kubernetes master. The `k
 
     kubernetes_apt_release_channel: main
     kubernetes_apt_repository: "deb http://apt.kubernetes.io/ kubernetes-xenial {{ kubernetes_apt_release_channel }}"
-    kubernetes_apt_ignore_key_error: False
+    kubernetes_apt_ignore_key_error: false
 
 Apt repository options for Kubernetes installation.
 
@@ -91,7 +91,7 @@ None.
 - hosts: all
 
   vars:
-    kubernetes_allow_pods_on_master: True
+    kubernetes_allow_pods_on_master: true
 
   roles:
     - geerlingguy.docker
@@ -118,7 +118,7 @@ Playbook:
 - hosts: all
 
   vars:
-    kubernetes_allow_pods_on_master: True
+    kubernetes_allow_pods_on_master: true
 
   roles:
     - geerlingguy.docker

@@ -1,16 +1,16 @@
 ---
 - name: Converge
   hosts: all
-  become: True
+  become: true
 
   vars:
     # Allow swap in test environments (hard to control in some Docker envs).
     kubernetes_kubelet_extra_args: "--fail-swap-on=false --cgroup-driver=cgroupfs"
-    docker_install_compose: False
+    docker_install_compose: false
 
   pre_tasks:
     - name: Update apt cache.
-      apt: update_cache=True cache_valid_time=600
+      apt: update_cache=true cache_valid_time=600
       when: ansible_os_family == 'Debian'
 
     - name: Ensure test dependencies are installed (RedHat).
@@ -31,7 +31,7 @@
   post_tasks:
     - name: Get cluster info.
       command: kubectl cluster-info
-      changed_when: False
+      changed_when: false
       register: kubernetes_info
 
     - name: Print cluster info.
@@ -39,7 +39,7 @@
 
     - name: Get all running pods.
       command: kubectl get pods --all-namespaces
-      changed_when: False
+      changed_when: false
       register: kubernetes_pods
 
     - name: Print list of running pods.
