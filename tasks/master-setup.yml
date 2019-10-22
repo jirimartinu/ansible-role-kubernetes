@@ -51,7 +51,6 @@
     - kubernetes_allow_pods_on_master
     - not kubernetes_init_stat.stat.exists
 
-- name: Enable the Kubernetes Web Dashboard UI (if configured).
-  command: "kubectl apply -f {{ kubernetes_web_ui_manifest_file }}"
-  when:
-    - kubernetes_enable_web_ui
+# Set up Dashboard.
+- include_tasks: dashboard.yml
+  when: kubernetes_enable_web_ui

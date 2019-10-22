@@ -1,0 +1,33 @@
+---
+- name: Ensure "~/cert/" directory exists.
+  file:
+    path: '~/cert'
+    state: directory
+
+- name: Copy certificates to "~/cert/" folder and allow then to use in dashboard
+  file:
+    src: "/etc/letsencrypt/live/{{ certbot_certs.domains[0]}}/{{ item.src }}"
+    dest: '~/certs/{{ item.dest }}'
+  with_items:
+    - { src: 'fullchain.pem', dest: 'dashboard.crt' }
+    - { src: 'privkey.pem', dest: 'dashboard.key' }
+
+- name: Create Secret with certificates for Dashboard
+  command: "kubectl create secret generic kubernetes-dashboard-certs --from-file=~/certs -n kubernetes-dashboard"
+
+- name: Enable the Kubernetes Web Dashboard UI (if configured).
+  command: "kubectl apply -f {{ kubernetes_web_ui_manifest_file }}"
+
+- name: Copy dashboard directory (scripts and yamls)
+  copy:
+    src: "roles/geerlingguy.kuberenets/files/dashboard"
+    dest: "{{ item.dest }}"
+    owner: '{{ item.owner }}'
+    group: '{{ item.group }}'
+    mode: '0644'
+  with_items:
+    - { dest: '~/dashboard', owner: '0', group: '0' }
+    - { dest: '/home/{{ ansible_user }}/dashboard', owner: '1000', group: '1000' }
+
+- name: Create ClusterRoleBinding for admin-user to be able to access Dashboard
+  command: "kubectl apply -f ~/dashboard/clusterrole.yaml"

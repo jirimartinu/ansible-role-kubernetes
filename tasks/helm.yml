@@ -1,0 +1,20 @@
+---
+- name: Get and install Helm
+  shell: "curl -L https://git.io/get_helm.sh | bash"
+
+- name: Copy helm directory (scripts and yamls)
+  copy:
+    src: "roles/geerlingguy.kuberenets/files/helm"
+    dest: "{{ item.dest }}"
+    owner: '{{ item.owner }}'
+    group: '{{ item.group }}'
+    mode: '0644'
+  with_items:
+    - { dest: '~/helm', owner: '0', group: '0' }
+    - { dest: '/home/{{ ansible_user }}/helm', owner: '1000', group: '1000' }
+
+- name: Create tiller ServiceAccount and RoleBinding.
+  command: "kubectl apply -f ~/helm/helm-rbac.yaml"
+
+- name: Init tiller
+  command: "helm init --service-account=tiller --history-max 300"

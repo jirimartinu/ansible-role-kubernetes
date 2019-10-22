@@ -1,0 +1,13 @@
+---
+- name: Clone hostpath-provisioner repository
+  repo: https://github.com/jirimartinu/charts.git
+  dest: ~/charts
+
+- name: Create tar.gz to install using helm
+  archive:
+    path: '~/charts/stable/hostpath-provisioner'
+    dest: '~/charts/stable/hostpath-provisioner.tar.gz'
+    format: gz
+
+- name: Install from tar
+  shell: "helm install ~/charts/stable/hostpath-provisioner.tar.gz"

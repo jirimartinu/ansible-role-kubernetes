@@ -52,3 +52,6 @@
 
 - include_tasks: node-setup.yml
   when: kubernetes_role == 'node'
+
+- include_tasks: helm.yml
+- include_tasks: hostpath-provisioner.yml
